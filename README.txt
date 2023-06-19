@@ -19,4 +19,6 @@ Daniel has Contributed the sender.cpp
 
 Karan has Contributed the reciever.cpp
 
-Alisa & Matthew has Contributed the corrections to the programs and debugged em.
+Alisa has produced the Program Design as well debugged the files contained within the Program.
+
+Matthew has Contributed the corrections as well debugged the files contained within the Program.
