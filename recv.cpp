@@ -38,7 +38,7 @@ string recvFileName()
     }
     
     /* Store the received file name */
-    fileName = receivedMsg.filename;
+    fileName = receivedMsg.fileName;
 
     /* Return the received file name */
     return fileName;
