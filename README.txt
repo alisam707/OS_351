@@ -7,7 +7,7 @@ CPSC 351 - Operating Systems
 
 Email Addresses:
 
-dpalomera0@csu.fullerton.edu , deepkaran277@csu.fullerton.edu , X , X
+dpalomera0@csu.fullerton.edu , deepkaran277@csu.fullerton.edu , alisam@csu.fullerton.edu, matt.j@csu.fullerton.edu 
 
 Programming Language that is used: C++
 
