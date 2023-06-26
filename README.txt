@@ -1,6 +1,6 @@
 Authors of this Program:
 
-Daniel Palomera, Karandeep Singh , X , X
+Daniel Palomera, Karandeep Singh , Alisa Majarov, Matthew Jun
 
 Created For:
 CPSC 351 - Operating Systems
