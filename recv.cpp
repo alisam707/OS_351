@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string>
 #include "msg.h"    /* For the message struct */
+#include <cstring>
 
 using namespace std;
 
@@ -43,6 +44,65 @@ string recvFileName()
     /* Return the received file name */
     return fileName;
 }
+
+//unsigned long mainLoop(const char* fileName);
+unsigned long mainLoop(const char* fileName)
+{
+    /* Open the file for writing */
+    FILE* fp = fopen(fileName, "wb");
+    if (!fp) {
+        perror("fopen");
+        exit(1);
+    }
+
+    /* The buffer to store data received from shared memory */
+    char buffer[SHARED_MEMORY_CHUNK_SIZE];
+
+    /* The received message structure */
+    message receivedMsg;
+
+    /* The acknowledgement message structure */
+    ackMessage ackMsg;
+
+    while (true) {
+        /* Wait to receive a message from the sender */
+        if (msgrcv(msqid, &receivedMsg, sizeof(receivedMsg.size), SENDER_DATA_TYPE, 0) == -1) {
+            perror("msgrcv");
+            exit(1);
+        }
+
+        /* Get the size of the received chunk */
+        int dataSize = receivedMsg.size;
+
+        if (dataSize > 0) {
+            /* Read the data from shared memory */
+            memcpy(buffer, sharedMemPtr, dataSize);
+
+            /* Write the data to the file */
+            if (fwrite(buffer, sizeof(char), dataSize, fp) != dataSize) {
+                perror("fwrite");
+                exit(1);
+            }
+
+            /* Send acknowledgement message */
+            ackMsg.mtype = RECV_DONE_TYPE;
+            if (msgsnd(msqid, &ackMsg, sizeof(ackMsg), 0) == -1) {
+                perror("msgsnd");
+                exit(1);
+            }
+        } else {
+            /* Close the file */
+            fclose(fp);
+            break;
+        }
+    }
+
+    /* Calculate the number of bytes received */
+    unsigned long numBytesReceived = ftell(fp);
+
+    return numBytesReceived;
+}
+
 
 /**
  * Sets up the shared memory segment and message queue
@@ -111,6 +171,7 @@ void ctrlCSignal(int signal)
     cleanUp(shmid, msqid, sharedMemPtr);
     exit(0);
 }
+
 
 int main(int argc, char** argv)
 {
